@@ -2,15 +2,16 @@ import argparse
 from data.load_data import load_data
 from models.create_model import create_model
 from training import train
-
 BATCH_SIZE = 128
+NUM_EPOCHS =10
 
-def main():
-    args = parse_args()
-    data, input_dim, output_dim = load_data(args.dataset, BATCH_SIZE)
-    architecture = [input_dim] + [] + [output_dim]
+def train_validate_test(args=None):
+    args = args if not None else parse_args()
+    (tr_data, val_data, te_data), (input_dim, output_dim) = load_data(args.dataset, BATCH_SIZE)
+    architecture = [input_dim] + [128,128] + [output_dim]
     model = create_model(args.model, architecture)
-    train(model, data, 2, BATCH_SIZE)
+    print(model)
+    train(model, tr_data, val_data, NUM_EPOCHS, BATCH_SIZE)
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -22,4 +23,4 @@ def parse_args():
     return args
 
 if __name__=="__main__":
-    main()
+    train_validate_test()
